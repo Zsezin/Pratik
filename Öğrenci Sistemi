@@ -1,0 +1,50 @@
+//Öğrenci Sistemi
+
+import 'dart:io';
+
+void main(List<String> args) {
+
+  print("Lütfen öğrenci bilgilerinizi sirayla giriniz: (Adiniz ,Soyadiniz)");
+  Ogrenci ogrenci = Ogrenci();
+  
+  while(true){
+  print("Notlarinizi giriniz: (0 girdisi işleminizi sonlandiracaktir!)");  
+  double input = double.parse(stdin.readLineSync()!);
+  if(input == 0){
+    break;
+  } 
+  ogrenci.notEkle(input);
+  }
+  print("Not ortalamasi: ${ogrenci.ortalamaHesapla()}");
+}
+
+class Ogrenci{
+  String? ogrenciAd;
+  String? ogrenciSoyad;
+  List<double>grades = [];
+ 
+  Ogrenci(){
+    print("isim giriniz:");
+    ogrenciAd = stdin.readLineSync();
+    print("soyad giriniz: ");
+    ogrenciSoyad = stdin.readLineSync();
+    print("isim ve soyisim: $ogrenciAd $ogrenciSoyad");
+  }  
+
+  void notEkle(double grade){    
+    grades.add(grade);   
+  }
+
+  double ortalamaHesapla(){   
+    double toplam = 0;
+    if (grades.isNotEmpty){
+      for (double grade in grades){
+        toplam = toplam + grade;  
+        return toplam/grades.length; 
+      }   
+    }else{
+      print("Not girdisi boşdur!");
+    }
+    return 0.0;
+  }
+}
