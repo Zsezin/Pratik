@@ -1,0 +1,38 @@
+//Hesap makinesi
+
+import 'dart:io';
+
+void main(List<String> args) {
+
+  print("Hesap Makinesi!");
+  
+  print("İLK DEĞERİ GİRİNİZ: ");
+  double user1 = double.parse(stdin.readLineSync()!);
+
+  print("YAPMAK İSTEDİĞİNİZ İSLEMİ GİRİNİZ: (ORN: * , / , + , -)");
+  String user3 = stdin.readLineSync()!;
+
+  print("İKİNCİ DEĞERİ GİRİNİZ: ");
+  double user2 = double.parse(stdin.readLineSync()!);
+ 
+  double islem = 0;
+
+  if(user3 == '*'){
+    islem = user1*user2;
+  }else if(user3 == '/'){
+    if (user2 == 0){
+      print("Sayi sifira bölünemez!");
+    }else{
+      islem = user1/user2;
+    } 
+  }else if(user3 == '+'){
+    islem = user1+user2;
+  }else if(user3 == '-'){
+    islem = user1-user2;
+  }else{
+    print("GEÇERSİZ GİRDİ VERİLMİŞTİR! TEKRAR DENEYİZİNİZ!");
+  }
+
+  print("İşlem sonucunuz: $islem");
+
+} 
