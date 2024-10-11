@@ -1,0 +1,26 @@
+//Listedeki çiftleri bulma
+
+import 'dart:io';
+
+void main(List<String> args) {
+
+  List<double>sayilar = List.filled(10, 0);
+  double alinanSayilar = 0;
+  List<double>ciftsayilar = List.empty(growable: true);
+
+  for(int i = 0; i<sayilar.length; i++){
+    print("sayi giriniz!");
+    alinanSayilar = double.parse(stdin.readLineSync()!);
+    sayilar[i] = alinanSayilar;
+    if(alinanSayilar %2 == 0){
+      ciftsayilar.add(alinanSayilar);
+    }  
+  }
+  
+    
+  if(ciftsayilar.isNotEmpty){
+    print("Çift sayilar: ${ciftsayilar}");
+  }else{
+    print("Diziniz çift sayi içermemktedir!");
+  }
+}
