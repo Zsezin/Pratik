@@ -1,0 +1,189 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.grey[200],//arka plan gri olarak ayarlandı.
+        appBar: AppBar(
+            leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back),//appbarın ilk sırasına icon yerleştirildi ve bu icon kullanıcıdan aksiyon alabilecekmiş gibi tasarlandı
+            color: Colors.white,//icon rengi beyaz
+            ),
+            centerTitle: true,//firmalar merkeze yerleşti
+          flexibleSpace: Container( //bu container içinde üstten aşağı renk geçişi sağlanması için BoxDecoration widget kullanıldı
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[Color(0xFF1A237E),
+                  Color(0xFF42A5F5),]
+            ),
+          ),
+        ),
+
+          title: Text(//text ve text rengi oluşturuldu
+          'Firmalar',
+          style: TextStyle(
+          color: Colors.white,
+          ),
+          ),
+        ),
+
+        body: Column(
+          children: <Widget>[
+            Container(
+
+              margin: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+              decoration: BoxDecoration(//bu container da soldan sağa renk geçişi yapıldı
+                borderRadius: BorderRadius.circular(17),
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: <Color>[Color(0xFF1A237E),
+                      Color(0xFF42A5F5),]
+                ),
+              ),
+
+              child: ListTile(
+
+                leading://icon ilk olacak şekilde konuldu
+                  Icon(Icons.home,
+                    size: 35.0,
+                    color: Colors.white,
+                  ),
+
+                title: Text(
+                    '       Sağlık',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35,
+                  ),
+                ),
+              ),
+            ),
+
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              child: TextField(//text field da kullanıcıdan input alınıyor.
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                  prefixIcon: Icon(Icons.search),//ilk sırada icon yerleşir. alanın rengi beyaz olarak ayarlanır.
+                  fillColor: Colors.white,
+                  labelText: 'Firma Ara',
+                  helperText: 'İstediğiniz firmada indirim yakalama fırsatı...',//alt taraftaki yazı
+                  filled: true,
+                  border: InputBorder.none,//border istenmediği için silme işlemi yapıldı
+                  ),
+
+                ),
+
+              decoration: BoxDecoration(//text field ı sarmalayan gölge oluşturuldu
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 10,
+                    offset: Offset(1,0),
+                  ),
+                ],
+                ),
+              ),
+              Expanded(child: MyList()),
+          ],
+        ),
+      ),
+
+    );
+  }
+}
+
+class MyList extends StatelessWidget {
+  @override
+  final List<String> entries = <String>[ //ListView ile listelenecek firma isimleri belirlendi
+    'Firma Adı Uzun Firma Adı',
+    'Firma Adı ',
+    'Firma Adı Uzun Firma Adı',
+    'Firma Adı ',
+    'Firma Adı Uzun Firma Adı',
+  ];
+  final List<int> discount = <int>[ // alınacak indirim miktarları belirlendi
+    10,
+    10,
+    10,
+    10,
+    10,
+  ];
+
+
+  Widget build(BuildContext context) {
+    return ListView.builder( //listelerimi sıralıyorum
+      itemCount: entries.length,
+      itemBuilder: (BuildContext context,int index) {
+        return
+        Card(
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+          color: Colors.white,//card widget ının rengini beyaz ayarlar
+        child:
+                Row(
+                  children: <Widget>[
+                    SizedBox(//iconun biraz ileriden başlaması için kullanıldı
+                      width: 10,
+                    ),
+                    Icon(Icons.arrow_circle_right_outlined),
+
+                  SizedBox( //text in icondan biraz uzakta başlaması için kullanıldı
+                    width: 10,
+                  ),
+
+                  Expanded(
+                    child: Text(//üstte belirlenen firmalar indexlerine göre sırayla card ın içine yerleşir
+                    entries[index],
+                    style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    ),
+                    ),
+                  ),
+
+                        SizedBox(//card içinde bulunan indirim kutucuğu oluşturulur
+                          height: 75,
+                          width: 90,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(13),
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: <Color>[Color(0xFF1A237E),
+                                    Color(0xFF42A5F5),]
+                              ),
+                            ),
+                            child:
+                            Center(//kutucuk içine üstte belirlenen indirimler indexlerine göre center a yerleştirilir
+                              child: Text(
+                                '%${discount[index]}',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+
+                                ),
+                              ),
+                            )
+                          ),
+                        ),
+                      ],
+                    ),
+        );
+      },
+    );
+  }
+}
