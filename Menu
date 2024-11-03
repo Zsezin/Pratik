@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Menu',
+      home: MenuList(), //uygulma ilk açıldığında ki ana sayfa oluşturuldu.
+    );
+  }
+}
+
+class Product { //ürünler için product isimli bir class oluşturuldu.
+  final String itemName;
+  final double price;
+
+  Product(this.itemName, this.price);
+}
+
+class MenuList extends StatefulWidget {//tıklama işlemi gerçekleşeceği için ekranın state i değişir bu yüzden stateless yerine stateful kullanılır.
+  const MenuList({super.key});
+
+  @override
+  State<MenuList> createState() => _MenuListState();
+}
+class _MenuListState extends State<MenuList> {
+
+  List <Product> listData = [ //her item in  karşılığında aldığı price yer verildi.
+    Product('Item 1' , 10),
+    Product('Item 2' , 20),
+    Product('Item 3' , 30),
+    Product('Item 4' , 40),
+    Product('Item 5' , 50),
+    Product('Item 6' , 60),
+    Product('Item 7' , 70),
+    Product('Item 8' , 80),
+    Product('Item 9' , 90),
+    Product('Item 10' , 100),
+  ];
+
+
+  int selectedItem = 0; //başlangıçtaki seçilen item 0 olduğu için sıfıra eşitlendi int? selectedItem da yapılabilirdi.
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.teal[100],//arka plan rengi oluşturuldu.
+      appBar: AppBar(
+        backgroundColor: Colors.teal[200],//appbarın arka plan rengi oluşturuldu.
+        title: Center(//appbarda yer alan text oluşturuldu,bold yapıldı ve boyutu ayarlandı. Center widgetla appbara ortalandı.
+          child: Text(
+            'Item List',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Container( //itemlerin sıralanacağı bir container oluşturulur.renk belirlenmediği için şeffaftır.
+            height: 110,
+            child: ListView.builder(// itemlerin yan yana sıralanması ve onların scrollable olması sağlanacak.
+              scrollDirection: Axis.horizontal, //yatay bir şekilde scroll olması sağlandı.
+              itemCount: listData.length,
+              itemBuilder: (BuildContext context, int index){
+                return GestureDetector(//mouse ile click leri algılıyor. seçme işlemi burada .
+                  onTap: (){
+                    setState(() {
+                      selectedItem = index;
+                    });
+                  },
+                  child: Container(//bu containerda seçme işlemine bağlı renk değişimleri belirlendi.
+                    margin: EdgeInsets.all(5.0),
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: selectedItem == index ? Colors.pink[50] : Colors.teal[50],
+                      border: Border.all(
+                        color: selectedItem == index ? Colors.pink : Colors.teal,
+                        width: 5,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Center(
+                      child: Text(//burada oluşan container içine sadece item ismi yazılması için oluşturduğumuz listeden sadece itemname ile isim çekildi.
+                        listData[index].itemName,
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          Expanded(
+              child:GridView.builder(//grid ikili olacak şekilde oluşturuldu ve aralarına konulmak istenen mesafe ayarlandı.
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                  ),
+                itemCount: listData.length,
+                itemBuilder: (BuildContext context, index){
+                    return Container(
+                      margin: EdgeInsets.all(5.0),
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: selectedItem == index ? Colors.pink[50] : Colors.teal[50],
+                        border: Border.all(
+                          color: selectedItem == index ? Colors.pink : Colors.teal,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Center(//oluşturulan container merkezine hem itemName hem de price yerleştirildi.
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              listData[index].itemName,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                             '€${listData[index].price}',
+                              style: TextStyle(
+                                fontSize: 27,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                },
+              ),
+          ),
+        ],
+      ),
+    );
+  }
+}
