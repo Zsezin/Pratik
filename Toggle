@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isDarkTheme = false; // Başlangıçta temanın açık olması tercih edildi.
+
+
+  ThemeData get lightTheme {//light mode için
+    return ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: Colors.blue, //mavi tonlar kullanılacağı belirlendi
+      appBarTheme: AppBarTheme(//açık moddaki appbarın rengi belirlendi
+        backgroundColor: Colors.blue.shade500,
+      ),
+      scaffoldBackgroundColor: Colors.blue.shade200,//açık moddaki arka plan rengi belirlendi
+    );
+  }
+  ThemeData get darkTheme {//Karanlık mod
+    return ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.grey,
+      appBarTheme: AppBarTheme(//karanlık moddaki appbar rengi belirlendi
+        backgroundColor: Colors.grey.shade900,
+      ),
+      scaffoldBackgroundColor: Colors.grey.shade800,//karanlık moddaki arka plan rengi
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Toggle',
+      theme: _isDarkTheme ? darkTheme : lightTheme, // Tema eğer light theme is dark theme yapar,dark theme ise light theme yapar
+      home: Scaffold(
+        appBar: AppBar(//appbar ın merkezine text yerleştirildi 'Toggle'.
+          title: Center(
+            child: Text(
+            'Toggle',
+              style: TextStyle(//appbar da merkeze yerleştirilmiş yazının ailesi,ve boyutu belirlenir.
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Pacifico',
+              ),
+            ),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text( //mode yazısını ekranın ortasına yerleştirir.
+                'Mode:',
+                style: TextStyle(
+                    fontSize: 24,
+                ),
+              ),
+              Text(
+                _isDarkTheme ? 'Dark Mode' : 'Light Mode', //eğer karanlık tema ise mod dark mode olarak eğer değilse light mode olarak değişir
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: <Widget>[
+                   Text('Change the Mode'), //switch yanına yazı eklendi
+                   Switch(
+                    value: _isDarkTheme,
+                    activeColor: Colors.blue[900],//switch rengi belirlendi
+                    onChanged: (bool value) {
+                      setState(() {
+                        _isDarkTheme = !_isDarkTheme; // Temayı değiştir
+                      });
+                    },
+                   ),
+                 ],
+               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
