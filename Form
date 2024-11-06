@@ -1,0 +1,153 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(//arka plan rengi
+        backgroundColor: Colors.deepPurple[100],
+        appBar: AppBar(//appbar rengi belirlendi,text yazılıp rengi ve boyutu belirlenip center yerlşetirildi.
+          backgroundColor: Colors.deepPurple[200],
+            title: Center(
+              child: Text(
+                  "Kullanıcı Formu",
+                style:TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+        ),
+        body: Padding(//genel olarak ekranın çerçevesine uzaklık sağlandı.
+          padding: const EdgeInsets.all(15.0),
+          child: UserForm(),
+        ),
+      ),
+    );
+  }
+}
+
+class UserForm extends StatefulWidget {
+  @override
+  _UserFormState createState() => _UserFormState();
+}
+
+class _UserFormState extends State<UserForm> {
+
+  final _formKey = GlobalKey<FormState>();// Form state yönetimi için GlobalKey
+
+
+  final TextEditingController _nameController = TextEditingController();// Form alanları için text controller
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
+  void _submitForm() {// Formu gönderme işlemi
+    if (_formKey.currentState?.validate() ?? false) { // Form geçerli, işlemi yapılır.
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Form başarıyla gönderildi!'),
+      ),
+      );
+    } else {// Form geçersiz, hata mesajlarını gösterilir.
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Lütfen tüm alanları doğru şekilde doldurun!'),
+      ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey, // Form state'i bu key ile yönetilecek.
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment:MainAxisAlignment.center,
+        children: <Widget>[
+          Card(
+            color: Colors.deepPurple[300],//şifrenin olduğu kard rengi belirtilir.
+            child: TextFormField( // İsim alınımı burdan sağlanıyor.
+              controller: _nameController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                labelText: 'İsim',
+                contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Lütfen isminizi giriniz';//eğer girdi olmazsa kullanıcıya girdi girmesi için uyarı verir.
+                }
+                return null;
+              },
+            ),
+          ),
+
+
+          Card(
+            color: Colors.deepPurple[300],// epostanın olduğu kard rengi belirtilir
+            child: TextFormField( // E-posta alanı oluşturulur.
+              controller: _emailController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                  labelText: 'E-posta',
+                contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.isEmpty) {//kullanıcı eposta girmemişse uyarı verir
+                  return 'Lütfen e-posta adresinizi girin';
+                }
+
+                const emailRegex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                final emailTest = RegExp(emailRegex);
+                if (!emailTest.hasMatch(value)) {// E-posta formatına uygun bir eposta girilmemişse buna uygun bir uyarı döner
+                  return 'Geçerli e-posta giriniz';
+                }
+                return null;
+              },
+            ),
+          ),
+
+
+          Card(
+            color: Colors.deepPurple[300],
+            child: TextFormField(// Şifre alanı oluşturulur.
+              controller: _passwordController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                labelText: 'Şifre',
+                contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+              ),
+              obscureText: true, // Şifreyi gizler
+              validator: (value) {
+                if (value == null || value.isEmpty) {//şifrenin istenilen biziçimde girilmesi sağlanır eğer girilmezse kullanıcıya uyarı döner.
+                  return 'Lütfen şifrenizi giriniz';
+                }
+                if (value.length < 6) {
+                  return 'Şifre en az 6 karakter olmalı';
+                }
+                return null;
+              },
+            ),
+          ),
+
+          // Formu gönderme butonu burdan oluşturuldu ve konumu ayarlandı.
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: _submitForm,
+                child: Text('Formu Gönder'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
